@@ -15,7 +15,7 @@
             const form = document.getElementById("uploadForm");
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
-                const fileInput = fomr.querySelector("input [type=file]");
+                const fileInput = form.querySelector("input[type=file]");
                 const formData = new FormData();
                 formData.append("file", fileInput.files[0]);
 
@@ -24,7 +24,7 @@
                     body: formData
                 });
                 const data = await res.json();
-                document.getElementId("result").textContent = data.text;
+                document.getElementById("result").textContent = data.text;
             });
         </script>
     </body>

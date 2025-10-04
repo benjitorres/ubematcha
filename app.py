@@ -21,10 +21,10 @@ async def root():
 # Transcription endpoint
 @app.post("/transcribe")
 async def transcribe(file: UploadFile = File(...)):
-    # Save uploaded file to a temporary location
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
-        tmp.write(await file.read())
-        tmp_path = tmp.name
+    global model
+    if model is None:
+        import whisper
+        model = whisper.load_model("small")
 
     # Run Whisper transcription
     result = model.transcribe(tmp_path, language=None, beam_size=5)

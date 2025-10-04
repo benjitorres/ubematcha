@@ -9,7 +9,6 @@ model = whisper.load_model("base")
 
 app = FastAPI()
 
-
 @app.get("/", response_class=HTMLResponse)
 async def main():
     return """

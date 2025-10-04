@@ -1,34 +1,36 @@
 import os
 import whisper
 from fastapi import FastAPI, File, UploadFile
-
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-
-import uvicorn
 import tempfile
 
-#load model once when server starts so it doesn't reload every request
+# Load Whisper model once at startup
 model = whisper.load_model("base")
 
 app = FastAPI()
 
+# Serve static files (like index.html)
 app.mount("/static", StaticFiles(directory="."), name="static")
 
+# Root route serves index.html
 @app.get("/", response_class=FileResponse)
 async def root():
     return "index.html"
 
+# Transcription endpoint
 @app.post("/transcribe")
-
 async def transcribe(file: UploadFile = File(...)):
-    #save upload file to a temp location
+    # Save uploaded file to a temporary location
     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
         tmp.write(await file.read())
         tmp_path = tmp.name
 
-    #run whisper transcription
+    # Run Whisper transcription
     result = model.transcribe(tmp_path, language=None, beam_size=5)
+
+    # Clean up temp file
+    os.remove(tmp_path)
 
     return {
         "language": result.get("language"),
@@ -39,7 +41,9 @@ async def transcribe(file: UploadFile = File(...)):
         ],
     }
 
-"""
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
-"""
+# ---- LOCAL TESTING ONLY ----
+# When running locally, you can use `python app.py` to test.
+# On Render, remove this part / comment it out.
+#if __name__ == "__main__" and os.environ.get("RENDER") is None:
+ #   import uvicorn
+  #  uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -2,5 +2,5 @@ fastapi
 uvicorn[standard]
 python-multipart
 -f https://download.pytorch.org/whl/cpu/torch_stable.html
-torch==2.8.0
+torch==2.7.1
 openai-whisper

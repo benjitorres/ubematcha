@@ -1,5 +1,9 @@
+import os
 import whisper
-from fastapi import FastAPI, File, UploadFile, HTMLResponse
+from fastapi import FastAPI, File, UploadFile
+
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 import uvicorn
 import tempfile
@@ -9,19 +13,11 @@ model = whisper.load_model("base")
 
 app = FastAPI()
 
-@app.get("/", response_class=HTMLResponse)
-async def main():
-    return """
-    <html>
-        <body>
-            <h2>Upload an audio/video file</h2>
-            <form action="/transcribe" enctype="multipart/form-data" method="post">
-                <input name="file" type="file">
-                <input type="submit" value="Transcribe">
-            </form>
-        </body>
-    </html>
-    """
+app.mount("/static", StaticFiles(directory="."), name="static")
+
+@app.get("/", response_class=FileResponse)
+async def root():
+    return "index.html"
 
 @app.post("/transcribe")
 

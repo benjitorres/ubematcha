@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ube Matcha Is Overrated</title>
+    </head>
+    <body>
+        <h1>Upload an audio/video file</h1>
+        <form id="uploadForm">
+            <input type="file" name="file" />
+            <button type="submit">Transcribe</button>
+        </form>
+        <pre id="result"></pre>
+
+        <script>
+            const form = document.getElementById("uploadForm");
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const fileInput = fomr.querySelector("input [type=file]");
+                const formData = new FormData();
+                formData.append("file", fileInput.files[0]);
+
+                const res = await fetch("/transcribe", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await res.json();
+                document.getElementId("result").textContent = data.text;
+            });
+        </script>
+    </body>
+</html>

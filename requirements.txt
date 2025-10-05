@@ -3,4 +3,4 @@ uvicorn[standard]
 python-multipart
 --find-links https://download.pytorch.org/whl/cpu/torch_stable.html
 torch==2.7.1
-openai-whisper==20240930
+git+https://github.com/openai/whisper.git

@@ -21,7 +21,7 @@ async def transcribe(file: UploadFile = File(...)):
     global model
     if model is None:
         import whisper
-        model = whisper.load_model("tiny")  # small = faster for Render free tier
+        model = whisper.load_model("tiny.en")  # small = faster for Render free tier
 
     # Save uploaded file temporarily
     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:

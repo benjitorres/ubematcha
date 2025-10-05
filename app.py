@@ -28,6 +28,9 @@ async def transcribe(file: UploadFile = File(...)):
     result = model.transcribe(tmp_path)
     return {"text": result["text"]}
 
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # Railway sets PORT, default 8000 locally
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 # --- LOCAL TESTING ONLY ---
 # Uncomment the lines below to run locally with `python app.py`

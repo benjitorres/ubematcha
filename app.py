@@ -75,7 +75,11 @@ async def transcribe(file: UploadFile = File(...)):
             language="en",      # assume English; remove if you want auto
             temperature=0.0,    # deterministic, fewer silly mistakes
             best_of=3,          # try several candidates
-            beam_size=5,        # beam search
+            beam_size=5,
+            condition_on_previous_text=False,
+            compression_ratio_threshold=2.4,
+            logprob_threshold=-1.0,
+            no_speech_threshold=0.6,
         )
 
         text = (result.get("text") or "").strip()

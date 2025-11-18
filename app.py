@@ -1,8 +1,14 @@
 from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import HTMLResponse
 import whisper
 import tempfile
 
 app = FastAPI()
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    with open("index.html", "r") as f:
+        return f.read()
 
 model = None
 

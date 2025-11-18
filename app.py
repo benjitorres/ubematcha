@@ -16,7 +16,7 @@ model = None
 async def load_model():
     global model
     print("Loading Whisper model...")
-    model = whisper.load_model("tiny", device="cpu")
+    model = whisper.load_model("base", device="cpu")
     print("Model loaded successfully!")
 
 @app.post("/transcribe")
@@ -31,7 +31,15 @@ async def transcribe(file: UploadFile = File(...)):
         tmp.write(contents)
         tmp_path = tmp.name
 
-    result = model.transcribe(tmp_path)
+    result = await run_in_threadpool(
+    model.transcribe,
+    tmp_path,
+    language="en",     # assume English; remove if mixed-language
+    temperature=0.0,   # more stable, less random
+    best_of=3,         # try several decoding samples (improves accuracy)
+    beam_size=5,       # beam search width (improves accuracy)
+)
+
     return {"text": result["text"]}
 
 if __name__ == "__main__":

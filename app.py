@@ -16,7 +16,7 @@ model = None
 async def load_model():
     global model
     print("Loading Whisper model...")
-    model = whisper.load_model("tiny")
+    model = whisper.load_model("tiny", device="cpu")
     print("Model loaded successfully!")
 
 @app.post("/transcribe")

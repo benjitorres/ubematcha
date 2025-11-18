@@ -22,7 +22,7 @@ async def load_model():
     global model
     print("Loading Whisper model...")
     # You can switch "tiny" -> "base" later if performance is OK
-    model = whisper.load_model("tiny", device="cpu")
+    model = whisper.load_model("base", device="cpu")
     print("Model loaded successfully!")
 
 
@@ -73,7 +73,7 @@ async def transcribe(file: UploadFile = File(...)):
             model.transcribe,
             tmp_path,
             language="en",      # assume English; remove if you want auto
-            temperature=0.0,    # deterministic, fewer silly mistakes
+            temperature=0.1,    # deterministic, fewer silly mistakes
             best_of=3,          # try several candidates
             beam_size=5,
             condition_on_previous_text=False,
